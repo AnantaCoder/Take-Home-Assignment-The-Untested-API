@@ -317,6 +317,24 @@ describe('taskService.completeTask()', () => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// assignTask()
+// ═══════════════════════════════════════════════════════════════════════════════
+describe('taskService.assignTask()', () => {
+  it('should assign a task to a user', () => {
+    const task = createSampleTask();
+    const updated = taskService.assignTask(task.id, 'John Doe');
+    
+    expect(updated.assignee).toBe('John Doe');
+    expect(taskService.findById(task.id).assignee).toBe('John Doe');
+  });
+
+  it('should return null if task does not exist', () => {
+    const result = taskService.assignTask('non-existent-id', 'John Doe');
+    expect(result).toBeNull();
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // _reset()
 // ═══════════════════════════════════════════════════════════════════════════════
 describe('taskService._reset()', () => {

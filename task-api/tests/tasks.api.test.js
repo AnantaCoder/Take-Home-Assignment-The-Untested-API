@@ -331,3 +331,51 @@ describe('GET /tasks/stats', () => {
   });
 });
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// PATCH /tasks/:id/assign — Assign task
+// ═══════════════════════════════════════════════════════════════════════════════
+describe('PATCH /tasks/:id/assign', () => {
+  it('should assign a task to a valid user', async () => {
+    const createRes = await createTaskViaAPI();
+    const id = createRes.body.id;
+
+    const res = await request(app)
+      .patch(`/tasks/${id}/assign`)
+      .send({ assignee: 'Alice' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.assignee).toBe('Alice');
+  });
+
+  it('should return 400 if assignee is missing', async () => {
+    const createRes = await createTaskViaAPI();
+    const id = createRes.body.id;
+
+    const res = await request(app)
+      .patch(`/tasks/${id}/assign`)
+      .send({});
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBeDefined();
+  });
+
+  it('should return 400 if assignee is an empty string', async () => {
+    const createRes = await createTaskViaAPI();
+    const id = createRes.body.id;
+
+    const res = await request(app)
+      .patch(`/tasks/${id}/assign`)
+      .send({ assignee: '   ' });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBeDefined();
+  });
+
+  it('should return 404 if task does not exist', async () => {
+    const res = await request(app)
+      .patch('/tasks/non-existent-id/assign')
+      .send({ assignee: 'Bob' });
+
+    expect(res.status).toBe(404);
+  });
+});
