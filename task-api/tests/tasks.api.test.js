@@ -347,6 +347,17 @@ describe('PATCH /tasks/:id/assign', () => {
     expect(res.body.assignee).toBe('Alice');
   });
 
+  it('should allow reassigning an already assigned task', async () => {
+    const createRes = await createTaskViaAPI();
+    const id = createRes.body.id;
+
+    await request(app).patch(`/tasks/${id}/assign`).send({ assignee: 'Alice' });
+    const res = await request(app).patch(`/tasks/${id}/assign`).send({ assignee: 'Bob' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.assignee).toBe('Bob');
+  });
+
   it('should return 400 if assignee is missing', async () => {
     const createRes = await createTaskViaAPI();
     const id = createRes.body.id;
