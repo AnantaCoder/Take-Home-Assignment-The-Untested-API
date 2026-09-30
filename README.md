@@ -116,6 +116,9 @@ See [ASSIGNMENT.md](./ASSIGNMENT.md) for full submission requirements. At minimu
 
 ## Submission Notes
 
+### Test Coverage
+![Test Coverage Summary](./test_coverage.png)
+
 ### What I'd test next if I had more time
 - Performance testing/load testing, especially around the pagination logic if the array size grows.
 - Test coverage for invalid UUID formats on the `/:id` paths to ensure the API handles them gracefully.
